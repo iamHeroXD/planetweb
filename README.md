@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🪐 RCN Universe
 
-## Getting Started
+> **Explore the Digital Universe of RCN** — an interactive 3D space-exploration portfolio that feels like a AAA game menu, not a website.
 
-First, run the development server:
+Scrolling doesn't move the page — it pilots a spaceship through deep space. Each planet is a section. Land on one to open it.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black) ![Three.js](https://img.shields.io/badge/Three.js-R3F-8B5CF6) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)
+
+## ✨ Features
+
+- **Living 3D universe** — thousands of stars (instanced), procedural GLSL nebulas, drifting space dust, shooting stars, an instanced asteroid field.
+- **6 themed planets** — Home, Projects, Services, Clients, Team, Contact — each with a unique material, atmosphere (fresnel glow), rings and orbiting moons.
+- **Scroll = camera flight** — Lenis smooth-scroll drives a damped camera journey between planets. No traditional page scrolling.
+- **Click to land** — cinematic fly-to focus, then an animated holographic section panel slides in.
+- **Hover interactions** — planets glow, rings light up, labels appear.
+- **🔒 Secret Developer Vault** — find the hidden artifact drifting in space to unlock a 7th planet with dev logs, fun facts & achievements.
+- **Post-processing** — bloom, vignette, chromatic aberration, film grain.
+- **Performance** — adaptive DPR, instancing, single-draw-call particle systems, quality tiers, and a reduced-geometry mobile experience.
+
+## 🛠️ Tech Stack
+
+Next.js · React · TypeScript · Tailwind CSS · Three.js · React Three Fiber · Drei · @react-three/postprocessing · GSAP · Framer Motion · Lenis · Zustand
+
+## 🚀 Getting Started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm start        # serve production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧭 How to explore
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Scroll** to travel between planets.
+2. **Hover** a planet (or use the right-side nav) to preview it.
+3. **Click** a planet to land and open its section.
+4. **Look around** — something is hiding in the dark. 🟢
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Structure
 
-## Learn More
+```
+src/
+├─ app/                  # Next.js app router (layout, page, globals)
+├─ components/
+│  ├─ Universe.tsx       # Canvas + Lenis scroll driver
+│  ├─ Experience.tsx     # client composition (canvas + UI overlays)
+│  ├─ scene/             # 3D: planets, starfield, nebula, effects, camera rig…
+│  └─ ui/                # HUD, loader, section panels
+└─ lib/                  # planet config, content, store, hooks
+```
 
-To learn more about Next.js, take a look at the following resources:
+## ☁️ Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Optimized for **Vercel** — push to the connected repo and it deploys automatically.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ by **RCN** — Hero.X · Jenish · Vortex · DeAdHellion
