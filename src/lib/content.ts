@@ -157,14 +157,21 @@ export const TEAM: TeamMember[] = [
     specialty: "React / Motion",
   },
   {
-    handle: "Vortex",
+    handle: "Niamaru",
     role: "Backend / Bots",
     bio: "Builds the engines that never sleep.",
     color: "#34d399",
     specialty: "Automation / APIs",
   },
   {
-    handle: "DeAdHellion",
+    handle: "Terminal",
+    role: "DevOps · Infra",
+    bio: "Keeps the fleet online and shipping at warp speed.",
+    color: "#fbbf24",
+    specialty: "Cloud / CI",
+  },
+  {
+    handle: "SolidBranch",
     role: "Designer · Creative",
     bio: "Crafts the look that makes people stare.",
     color: "#f472b6",

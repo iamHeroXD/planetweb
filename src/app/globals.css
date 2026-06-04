@@ -16,6 +16,18 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-jetbrains);
+  --font-display: var(--font-syne);
+}
+
+.font-display {
+  font-family: var(--font-syne), var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-syne), var(--font-space-grotesk), sans-serif;
 }
 
 * {

@@ -2,24 +2,42 @@
 
 import { useProgress } from "@react-three/drei";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUniverse } from "@/lib/store";
 
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 export default function Loader() {
-  const { progress, active } = useProgress();
+  const { progress } = useProgress();
   const launched = useUniverse((s) => s.launched);
   const launch = useUniverse((s) => s.launch);
   const ready = useUniverse((s) => s.ready);
   const setReady = useUniverse((s) => s.setReady);
 
-  const done = progress >= 100 && !active;
+  // Synthetic, time-based progress. The scene is fully procedural (no async
+  // assets), so we can't rely on the loading manager ever firing — we drive a
+  // smooth boot sequence ourselves and blend in any real asset progress.
+  const [pct, setPct] = useState(0);
+  const progressRef = useRef(progress);
+  progressRef.current = progress;
 
   useEffect(() => {
-    if (done && !ready) {
-      const t = setTimeout(() => setReady(true), 400);
-      return () => clearTimeout(t);
-    }
-  }, [done, ready, setReady]);
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const timed = Math.min(100, (elapsed / 1700) * 100);
+      const next = Math.max(timed, progressRef.current);
+      setPct(next);
+      if (next < 100) {
+        raf = requestAnimationFrame(tick);
+      } else if (!useUniverse.getState().ready) {
+        setReady(true);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [setReady]);
 
   return (
     <AnimatePresence>
@@ -28,7 +46,7 @@ export default function Loader() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+          transition={{ duration: 1, ease: EASE }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background"
         >
           {/* ambient radial backdrop */}
@@ -49,7 +67,7 @@ export default function Loader() {
             <span className="font-mono text-[11px] uppercase tracking-[0.5em] text-accent/80">
               RCN
             </span>
-            <h1 className="mt-3 text-5xl md:text-7xl font-bold tracking-tight gradient-text text-glow">
+            <h1 className="font-display mt-3 text-5xl md:text-7xl font-bold tracking-tight gradient-text text-glow">
               RCN&nbsp;UNIVERSE
             </h1>
             <p className="mt-4 max-w-md text-sm md:text-base font-light text-white/60">
@@ -60,14 +78,12 @@ export default function Loader() {
             <div className="mt-10 w-64">
               <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
                 <span>{ready ? "Systems online" : "Calibrating warp core"}</span>
-                <span>{Math.floor(progress)}%</span>
+                <span>{Math.floor(pct)}%</span>
               </div>
               <div className="mt-2 h-px w-full overflow-hidden bg-white/10">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-primary via-secondary to-accent"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ ease: "easeOut" }}
+                <div
+                  className="h-full bg-gradient-to-r from-primary via-secondary to-accent transition-[width] duration-150 ease-out"
+                  style={{ width: `${pct}%` }}
                 />
               </div>
             </div>

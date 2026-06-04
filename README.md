@@ -56,4 +56,4 @@ Optimized for **Vercel** — push to the connected repo and it deploys automatic
 
 ---
 
-Built with ❤️ by **RCN** — Hero.X · Jenish · Vortex · DeAdHellion
+Built with ❤️ by **RCN** — Hero.X · Jenish · Niamaru · Terminal · SolidBranch

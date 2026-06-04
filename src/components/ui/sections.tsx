@@ -233,7 +233,7 @@ export function TeamSection() {
         title="Team"
         desc="The operators behind RCN. Four minds, one universe."
       />
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {TEAM.map((m) => (
           <motion.div
             key={m.handle}
