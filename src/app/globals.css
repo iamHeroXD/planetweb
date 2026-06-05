@@ -16,18 +16,23 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-jetbrains);
-  --font-display: var(--font-syne);
+  --font-display: var(--font-orbitron);
 }
 
 .font-display {
-  font-family: var(--font-syne), var(--font-space-grotesk), sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-orbitron), var(--font-space-grotesk), sans-serif;
 }
 
 h1,
-h2,
+h2 {
+  font-family: var(--font-orbitron), var(--font-space-grotesk), sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
 h3 {
-  font-family: var(--font-syne), var(--font-space-grotesk), sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
 }
 
 * {

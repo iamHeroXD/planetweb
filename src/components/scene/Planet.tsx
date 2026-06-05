@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import {
   MeshDistortMaterial,
@@ -11,6 +11,7 @@ import {
 import * as THREE from "three";
 import type { PlanetConfig } from "@/lib/planets";
 import { useUniverse } from "@/lib/store";
+import { makePlanetTexture, makeCloudTexture } from "@/lib/textures";
 
 /* ---------- Atmosphere glow (fresnel on a back-side shell) ---------- */
 const atmoVertex = /* glsl */ `
@@ -109,6 +110,30 @@ function Moon({
   );
 }
 
+/* ---------- Cloud layer ---------- */
+function Clouds({ radius, color }: { radius: number; color: string }) {
+  const ref = useRef<THREE.Mesh>(null);
+  const tex = useMemo(() => makeCloudTexture(), []);
+  useEffect(() => () => tex.dispose(), [tex]);
+  useFrame((_, delta) => {
+    if (ref.current) ref.current.rotation.y += delta * 0.02;
+  });
+  return (
+    <mesh ref={ref} scale={radius * 1.03}>
+      <sphereGeometry args={[1, 48, 48]} />
+      <meshStandardMaterial
+        map={tex}
+        alphaMap={tex}
+        color={color}
+        transparent
+        opacity={0.55}
+        depthWrite={false}
+        roughness={1}
+      />
+    </mesh>
+  );
+}
+
 /* ---------- Planet body material switch ---------- */
 function PlanetBody({
   planet,
@@ -117,9 +142,25 @@ function PlanetBody({
   planet: PlanetConfig;
   hovered: boolean;
 }) {
-  const emissiveIntensity = hovered ? 0.9 : 0.4;
+  const emissiveIntensity = hovered ? 0.75 : 0.32;
+
+  const kind: "gas" | "rocky" | "tech" =
+    planet.material === "gas"
+      ? "gas"
+      : planet.material === "metal" || planet.material === "station"
+        ? "tech"
+        : "rocky";
+
+  const map = useMemo(
+    () => makePlanetTexture(planet.color, kind),
+    [planet.color, kind],
+  );
+  useEffect(() => () => map.dispose(), [map]);
+
+  // White base so the baked-in surface colour shows true; emissive adds glow.
   const common = {
-    color: planet.color,
+    map,
+    color: "#ffffff",
     emissive: planet.emissive,
     emissiveIntensity,
   };
@@ -129,19 +170,19 @@ function PlanetBody({
       return (
         <MeshDistortMaterial
           {...common}
-          speed={2}
-          distort={0.35}
-          roughness={0.4}
-          metalness={0.2}
+          speed={1.4}
+          distort={0.22}
+          roughness={0.65}
+          metalness={0.25}
         />
       );
     case "wobble":
       return (
         <MeshWobbleMaterial
           {...common}
-          factor={0.25}
-          speed={1.5}
-          roughness={0.5}
+          factor={0.12}
+          speed={1.2}
+          roughness={0.7}
           metalness={0.2}
         />
       );
@@ -149,35 +190,27 @@ function PlanetBody({
       return (
         <meshStandardMaterial
           {...common}
-          roughness={0.25}
-          metalness={0.95}
+          roughnessMap={map}
+          roughness={0.45}
+          metalness={0.6}
         />
       );
     case "gas":
       return (
-        <MeshDistortMaterial
-          {...common}
-          speed={1.2}
-          distort={0.18}
-          roughness={0.8}
-          metalness={0}
-        />
+        <meshStandardMaterial {...common} roughness={0.85} metalness={0.05} />
       );
     case "station":
       return (
         <meshStandardMaterial
           {...common}
-          roughness={0.35}
-          metalness={0.8}
+          roughnessMap={map}
+          roughness={0.5}
+          metalness={0.5}
         />
       );
     default:
       return (
-        <meshStandardMaterial
-          {...common}
-          roughness={0.55}
-          metalness={0.3}
-        />
+        <meshStandardMaterial {...common} roughness={0.7} metalness={0.2} />
       );
   }
 }
@@ -244,6 +277,13 @@ export default function Planet({ planet }: { planet: PlanetConfig }) {
         <sphereGeometry args={[1, 64, 64]} />
         <PlanetBody planet={planet} hovered={isHovered} />
       </mesh>
+
+      {/* Clouds (atmospheric worlds only) */}
+      {(planet.material === "standard" ||
+        planet.material === "gas" ||
+        planet.material === "wobble") && (
+        <Clouds radius={planet.radius} color={planet.atmosphere} />
+      )}
 
       {/* Atmosphere */}
       <Atmosphere

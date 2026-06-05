@@ -231,7 +231,7 @@ export function TeamSection() {
       <SectionHeader
         eyebrow="Crew capsules"
         title="Team"
-        desc="The operators behind RCN. Four minds, one universe."
+        desc="The operators behind RCN. Five minds, one universe."
       />
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {TEAM.map((m) => (

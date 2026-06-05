@@ -2,9 +2,10 @@
 
 import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { AdaptiveDpr, AdaptiveEvents, Preload } from "@react-three/drei";
+import { Preload } from "@react-three/drei";
 import * as THREE from "three";
 
+import SpaceBackdrop from "./SpaceBackdrop";
 import Starfield from "./Starfield";
 import Nebula from "./Nebula";
 import Planet from "./Planet";
@@ -39,13 +40,15 @@ export default function Scene({ quality }: { quality: "low" | "high" }) {
 
   return (
     <>
-      {/* Lighting */}
-      <ambientLight intensity={0.25} color="#4c1d95" />
-      <hemisphereLight args={["#7c3aed", "#030712", 0.5]} />
-      <directionalLight position={[20, 30, 10]} intensity={1.1} color="#a78bfa" />
+      {/* Lighting — low ambient + a strong key "sun" for realistic terminator shadows */}
+      <ambientLight intensity={0.18} color="#3b2d6b" />
+      <hemisphereLight args={["#6d28d9", "#02030a", 0.35]} />
+      <directionalLight position={[40, 25, 20]} intensity={2.2} color="#fff5e6" />
+      <directionalLight position={[-30, -10, -20]} intensity={0.4} color="#5b8def" />
       <TravelingLight />
 
       {/* Deep space backdrop */}
+      <SpaceBackdrop />
       <Starfield quality={quality} />
       <Nebula quality={quality} />
       <SpaceDust count={quality === "high" ? 500 : 200} />
@@ -68,8 +71,6 @@ export default function Scene({ quality }: { quality: "low" | "high" }) {
       <CameraRig />
       <Effects quality={quality} />
 
-      <AdaptiveDpr pixelated />
-      <AdaptiveEvents />
       <Preload all />
     </>
   );

@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { makeStarTexture } from "@/lib/textures";
 
 /**
  * A dense, multi-coloured starfield spread across the entire journey volume.
@@ -24,6 +25,8 @@ function StarLayer({
 }) {
   const points = useRef<THREE.Points>(null);
   const material = useRef<THREE.PointsMaterial>(null);
+  const starTex = useMemo(() => makeStarTexture(), []);
+  useEffect(() => () => starTex.dispose(), [starTex]);
 
   const { positions, colors } = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -69,11 +72,13 @@ function StarLayer({
       </bufferGeometry>
       <pointsMaterial
         ref={material}
+        map={starTex}
+        alphaMap={starTex}
         size={size}
         sizeAttenuation
         vertexColors
         transparent
-        opacity={0.85}
+        opacity={0.9}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -89,21 +94,21 @@ export default function Starfield({ quality }: { quality: "low" | "high" }) {
         count={high ? 9000 : 3000}
         spread={600}
         depth={700}
-        size={0.7}
+        size={1.0}
         speed={1}
       />
       <StarLayer
         count={high ? 6000 : 2000}
         spread={400}
         depth={600}
-        size={1.2}
+        size={1.7}
         speed={-0.6}
       />
       <StarLayer
         count={high ? 2500 : 900}
         spread={260}
         depth={500}
-        size={2.0}
+        size={2.8}
         speed={0.3}
       />
     </group>

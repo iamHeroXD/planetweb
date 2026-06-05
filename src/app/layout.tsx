@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Syne, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Orbitron, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { SITE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-// Display / headings — a premium, award-style geometric grotesque.
-const syne = Syne({
-  variable: "--font-syne",
+// Display / headings — bold sci-fi face for that AAA space-menu feel.
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["500", "700", "800", "900"],
   display: "swap",
 });
 
@@ -23,26 +24,61 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RCN Universe — Explore the Digital Universe of RCN",
-  description:
-    "An interactive 3D space exploration experience. Travel between planets to discover the projects, services, team and universe of RCN.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE.title,
+    template: "%s · RCN Universe",
+  },
+  description: SITE.description,
+  applicationName: SITE.name,
   keywords: [
     "RCN",
     "portfolio",
     "three.js",
+    "react three fiber",
     "webgl",
     "creative developer",
-    "interactive",
+    "interactive 3D",
     "space",
+    "web design studio",
+    "bot development",
   ],
   authors: [{ name: "RCN" }],
-  openGraph: {
-    title: "RCN Universe",
-    description: "Explore the Digital Universe of RCN",
-    type: "website",
+  creator: "RCN",
+  publisher: "RCN",
+  category: "technology",
+  alternates: {
+    canonical: "/",
   },
-  icons: {
-    icon: "/favicon.ico",
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
+    url: SITE_URL,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
+    creator: "@rcn",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -62,7 +98,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${syne.variable} ${spaceGrotesk.variable} ${jetbrains.variable} antialiased`}
+        className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrains.variable} antialiased`}
       >
         {children}
       </body>

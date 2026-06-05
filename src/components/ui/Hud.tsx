@@ -40,7 +40,7 @@ export default function Hud() {
             <span className="pulse-ring absolute inset-0 rounded-lg border border-accent/40" />
           </span>
           <div className="text-left">
-            <div className="font-bold tracking-tight text-sm leading-none gradient-text">
+            <div className="font-display font-extrabold tracking-wide text-sm leading-none gradient-text">
               RCN UNIVERSE
             </div>
             <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/40">
